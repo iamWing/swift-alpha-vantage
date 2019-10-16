@@ -40,11 +40,12 @@
 	// "appPort": [],
 
 	// Uncomment the next line to run commands after the container is created - for example installing git.
-	"postCreateCommand": "apt update && apt upgrade -y && apt install -y git-flow vim",
+	"postCreateCommand": "apt update && apt upgrade -y && apt install -y git-flow vim && cd /root && git clone https://github.com/nicklockwood/SwiftFormat && cd SwiftFormat && swift build -c release && mv .build/x86_64-unknown-linux/release/swiftformat /usr/local/bin/",
 
 	// Add the IDs of extensions you want installed when the container is created in the array below.
 	"extensions": [
 		"vadimcn.vscode-lldb",
-		"vknabel.vscode-swift-development-environment"
+		"vknabel.vscode-swift-development-environment",
+		"vknabel.vscode-swiftformat"
 	]
 }
