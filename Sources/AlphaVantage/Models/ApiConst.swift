@@ -159,16 +159,16 @@ public struct ApiConst {
             case searchEndpoint(keyword: String)
         }
 
-        enum Const: String {
-            case intraday = "TIME_SERIES_INTRADAY"
-            case daily = "TIME_SERIES_DAILY"
-            case dailyAdjusted = "TIME_SERIES_DAILY_ADJUSTED"
-            case weekly = "TIME_SERIES_WEEKLY"
-            case weeklyAdjusted = "TIME_SERIES_WEEKLY_ADJUSTED"
-            case monthly = "TIME_SERIES_MONTHLY"
-            case monthlyAdjusted = "TIME_SERIES_MONTHLY_ADJUSTED"
-            case quoteEndpoint = "GLOBAL_QUOTE"
-            case searchEndpoint = "SYMBOL_SEARCH"
+        private struct Const {
+            static let intraday = "TIME_SERIES_INTRADAY"
+            static let daily = "TIME_SERIES_DAILY"
+            static let dailyAdjusted = "TIME_SERIES_DAILY_ADJUSTED"
+            static let weekly = "TIME_SERIES_WEEKLY"
+            static let weeklyAdjusted = "TIME_SERIES_WEEKLY_ADJUSTED"
+            static let monthly = "TIME_SERIES_MONTHLY"
+            static let monthlyAdjusted = "TIME_SERIES_MONTHLY_ADJUSTED"
+            static let quoteEndpoint = "GLOBAL_QUOTE"
+            static let searchEndpoint = "SYMBOL_SEARCH"
         }
     }
 }
