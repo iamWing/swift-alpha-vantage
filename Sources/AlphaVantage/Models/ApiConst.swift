@@ -1,7 +1,7 @@
 /**
- APIs provided by Alpha Vantage.
+ Constants of APIs provided by Alpha Vantage.
  */
-public struct AlphaVantageAPI {
+public struct ApiConst {
     static let url = "https://www.alphavantage.co/query?"
 
     private init() {}
@@ -21,15 +21,15 @@ public struct AlphaVantageAPI {
            - function: The API function of your choice
            - symbol: The symbol of the global security of your choice.
            For example: `symbol=MSFT`
-           - dataType: Data format to be returned from API requeset. Default 
+           - dataType: Data format to be returned from API requeset. Default
            format is `.json`
-           - apiKey: Your API key. Claim your free API key 
+           - apiKey: Your API key. Claim your free API key
            [here](https://www.alphavantage.co/support/#api-key)
          */
         static func api(function: Function,
-                               symbol: String,
-                               dataType: DataType = .json,
-                               apiKey: String) -> String {
+                        symbol: String,
+                        dataType: DataType = .json,
+                        apiKey: String) -> String {
             let temp = "\(url)function="
             var api = ""
 
@@ -94,7 +94,7 @@ public struct AlphaVantageAPI {
          Daily, weekly, and monthly time series contain 20+ years of
          historical data.
          */
-        public enum Function {
+        enum Function {
             /**
              Intraday time series (timestamp, open, high, low, close, volume)
              of the equity specified.
