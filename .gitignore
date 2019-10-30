@@ -3,3 +3,5 @@
 /Packages
 /*.xcodeproj
 xcuserdata/
+
+/Tests/AlphaVantageTests/PrivateConst.swift
