@@ -3,5 +3,6 @@ import XCTest
 import AlphaVantageTests
 
 var tests = [XCTestCaseEntry]()
-tests += AlphaVantageTests.allTests()
+tests += AlphaVantageTests.__allTests()
+
 XCTMain(tests)
