@@ -2,13 +2,13 @@ extension ApiResponse {
     /**
      * Namespace of response models related to stock time series APIs.
      */
-    struct StockTimeSeries {
+    public struct StockTimeSeries {
         /// Response model of `TIME_SERIES_INTRADAY` API.
-        struct STSIntraday: Decodable {
+        public struct STSIntraday: Decodable {
             var metadata: Metadata?
             var data: [String: MarketData]?
 
-            init(from decoder: Decoder) throws {
+            public init(from decoder: Decoder) throws {
                 let container = try decoder.container(keyedBy: GenericCodingKeys.self)
                 for key in container.allKeys {
                     if key.stringValue == "Meta Data" {
@@ -21,7 +21,7 @@ extension ApiResponse {
                 }
             }
 
-            struct Metadata: Decodable {
+            public struct Metadata: Decodable {
                 let information: String
                 let symbol: String
                 let lastRefresh: String
@@ -39,7 +39,7 @@ extension ApiResponse {
                 }
             }
 
-            struct MarketData: Decodable {
+            public struct MarketData: Decodable {
                 let open: String
                 let high: String
                 let low: String
