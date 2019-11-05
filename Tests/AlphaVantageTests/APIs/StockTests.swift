@@ -1,5 +1,6 @@
 @testable import AlphaVantage
 import XCTest
+import Foundation
 import SwiftyRequest
 
 private typealias Interval = ApiConst.Stock.IntradayInterval
@@ -52,5 +53,40 @@ final class StockTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 15)
+    }
+    
+    func testFetchStockIntradatExport() {
+        let expectation = self.expectation(description: "\(#function)\(#line)")
+        
+        let fm = FileManager.default
+        let path = fm.currentDirectoryPath
+
+        instance = Stock(
+            apiKey: PrivateConst.apiKey,
+            export: (path: URL(fileURLWithPath: path), dataType: .json)
+        )
+        
+        instance.fetchStockIntraday(symbol: symbol, interval: .min5) {
+            result, err in
+            XCTAssertNotNil(result?.metadata)
+            XCTAssertNotNil(result?.data)
+            
+            XCTAssertEqual(result?.metadata?.symbol, self.symbol)
+            XCTAssertEqual(result?.metadata?.interval, Interval.min5.rawValue)
+            
+            XCTAssertTrue(fm.fileExists(
+                atPath: "\(path)/intraday_5min_\(self.symbol).json"
+            ))
+            
+            print(err ?? "")
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 15)
+        
+        try? fm.removeItem(
+            at: URL(fileURLWithPath: "\(path)/intraday_5min_\(symbol).json")
+        )
     }
 }

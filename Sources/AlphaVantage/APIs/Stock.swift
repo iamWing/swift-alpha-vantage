@@ -7,11 +7,11 @@ private typealias ErrRes = ApiResponse.ApiError
 /// Implementation of APIs under `Stock Time Series` on Alpha Vantage.
 public class Stock: AlphaVantage {
     public var apiKey: String
-    public var export: (path: String, dataType: ApiConst.DataType)?
+    public var export: (path: URL, dataType: ApiConst.DataType)?
 
     public required init(
         apiKey: String,
-        export: (path: String, dataType: ApiConst.DataType)? = nil
+        export: (path: URL, dataType: ApiConst.DataType)? = nil
     ) {
         self.apiKey = apiKey
         self.export = export
@@ -61,11 +61,36 @@ public class Stock: AlphaVantage {
 
                     return
                 }
+                
+                var err: Error?
 
-                completion(decoded, nil)
+                if let export = self.export {
+                    let filename = "intraday_\(interval.rawValue)_\(symbol)"
+                    do {
+                        try self.handleExport(data: res.body,
+                                         filename: filename,
+                                         export)
+                    } catch {
+                        err = error
+                    }
+                }
+
+                completion(decoded, err)
             case let .failure(err):
                 completion(nil, err)
-            }
-        }
+            } // - end switch
+        } // - end completion
+    } // - end fetchStockIntraday
+    
+    private func handleExport(
+        data: Data,
+        filename: String,
+        _ meta: (path: URL, dataType: ApiConst.DataType)
+    ) throws {
+        let fullPath = meta.path.appendingPathComponent(
+            "/\(filename).\(meta.dataType.rawValue)"
+        )
+        
+        try DataExporter.export(data, to: fullPath)
     }
 }

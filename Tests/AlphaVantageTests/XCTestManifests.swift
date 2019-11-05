@@ -35,6 +35,7 @@ extension StockTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__StockTests = [
+        ("testFetchStockIntradatExport", testFetchStockIntradatExport),
         ("testFetchStockIntraday", testFetchStockIntraday),
         ("testFetchStockIntradayFail", testFetchStockIntradayFail),
     ]
