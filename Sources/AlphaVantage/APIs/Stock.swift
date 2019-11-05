@@ -34,14 +34,10 @@ public class Stock: AlphaVantage {
             _ err: Error?
         ) -> Void
     ) {
-        let apiUrl = ApiConst.Stock.api(
-            function: .intraday(interval: interval),
-            symbol: symbol,
-            dataType: export?.dataType ?? .json,
-            apiKey: apiKey
+        let request = RestRequest(
+            method: .get,
+            url: apiUrl(function: .intraday(interval: interval), symbol: symbol)
         )
-
-        let request = RestRequest(method: .get, url: apiUrl)
         // Uses `.responseData` instead of `.responseObject` to avoid
         // implementing another response block to retrieve binary `Data`
         // for exporting JSON/CSV file.
@@ -68,8 +64,8 @@ public class Stock: AlphaVantage {
                     let filename = "intraday_\(interval.rawValue)_\(symbol)"
                     do {
                         try self.handleExport(data: res.body,
-                                         filename: filename,
-                                         export)
+                                              filename: filename,
+                                              export)
                     } catch {
                         err = error
                     }
@@ -81,6 +77,64 @@ public class Stock: AlphaVantage {
             } // - end switch
         } // - end completion
     } // - end fetchStockIntraday
+    
+    public func fetchStockDaily(
+        symbol: String,
+        completion: @escaping (
+            _ result: ApiResponse.StockTimeSeries.STSDaily?,
+            _ err: Error?
+        ) -> Void
+    ) {
+        let request = RestRequest(
+            method: .get, url: apiUrl(function: .daily, symbol: symbol)
+        )
+        request.responseData { result in
+            switch result {
+            case let .success(res):
+                guard let decoded = try? JSONDecoder().decode(
+                    Res.STSDaily.self, from: res.body
+                ) else {
+                    if let errRes = try? JSONDecoder().decode(
+                        ErrRes.self, from: res.body
+                    ) {
+                        completion(nil, errRes)
+                    } else {
+                        completion(nil, ErrRes(errMsg: "Unknown Error"))
+                    }
+
+                    return
+                }
+                
+                var err: Error?
+                
+                if let export = self.export {
+                    let filename = "daily_\(symbol)"
+                    do {
+                        try self.handleExport(data: res.body,
+                                              filename: filename,
+                                              export)
+                    } catch {
+                        err = error
+                    }
+                }
+                
+                completion(decoded, err)
+            case let .failure(err):
+                completion(nil, err)
+            } // - end switch
+        } // - end completion
+    }
+    
+    private func apiUrl(function: ApiConst.Stock.Function,
+                        symbol: String) -> String
+    {
+        return ApiConst.Stock.api(
+            function: function,
+            symbol: symbol,
+            dataType: export?.dataType ?? .json,
+            apiKey: apiKey
+        )
+    }
     
     private func handleExport(
         data: Data,
