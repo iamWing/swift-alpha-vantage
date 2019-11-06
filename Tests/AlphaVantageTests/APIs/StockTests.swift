@@ -152,4 +152,67 @@ final class StockTests: XCTestCase {
         
         waitForExpectations(timeout: 15)
     }
+    
+    func testFetchStockDailyAdjusted() {
+        let expectation = self.expectation(description: "\(#function)\(#line)")
+        
+        instance.fetchStockDailyAdjusted(symbol: symbol) { result, err in
+            XCTAssertNotNil(result?.metadata)
+            XCTAssertNotNil(result?.data)
+            XCTAssertEqual(result?.metadata.symbol, self.symbol)
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testFetchStockDailyAdjustedFailed() {
+        let expectation = self.expectation(description: "\(#function)\(#line)")
+
+        instance = Stock(apiKey: "")
+        
+        instance.fetchStockDailyAdjusted(symbol: symbol) { result, err in
+            XCTAssertNil(result)
+            XCTAssertNotNil(err)
+            
+            let apiErr = err as? ApiResponse.ApiError
+            XCTAssertNotNil(apiErr)
+            
+            if (apiErr == nil) {
+                print(err.debugDescription)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testFetchStockDailyAdjustedExport() {
+        let expectation = self.expectation(description: "\(#function)\(#line)")
+        
+        let path = fm.currentDirectoryPath
+        
+        instance = Stock(
+            apiKey: PrivateConst.apiKey,
+            export: (path: URL(fileURLWithPath: path), dataType: .json)
+        )
+        
+        instance.fetchStockDailyAdjusted(symbol: symbol) { result, err in
+            XCTAssertNotNil(result?.metadata)
+            XCTAssertNotNil(result?.data)
+            XCTAssertEqual(result?.metadata.symbol, self.symbol)
+
+            XCTAssertTrue(self.fm.fileExists(
+                atPath: "\(path)/daily_adjusted_\(self.symbol).json"
+            ))
+            
+            print(err ?? "")
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
 }

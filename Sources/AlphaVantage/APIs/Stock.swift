@@ -78,6 +78,13 @@ public class Stock: AlphaVantage {
         } // - end completion
     } // - end fetchStockIntraday
     
+    /**
+     Request stock daily market data from API
+     
+     - Parameters:
+       - symbol: The symbol of target equity.
+       - completion: A closure to be executed once the request has finished.
+     */
     public func fetchStockDaily(
         symbol: String,
         completion: @escaping (
@@ -125,6 +132,60 @@ public class Stock: AlphaVantage {
         } // - end completion
     }
     
+    /**
+    Request stock adjusted daily market data from API
+    
+    - Parameters:
+      - symbol: The symbol of target equity.
+      - completion: A closure to be executed once the request has finished.
+    */
+    public func fetchStockDailyAdjusted(
+        symbol: String,
+        completion: @escaping (
+            _ result: ApiResponse.StockTimeSeries.STSDailyAdjusted?,
+            _ err: Error?
+        ) -> Void
+    ) {
+        let request = RestRequest(
+            method: .get, url: apiUrl(function: .dailyAdjusted, symbol: symbol)
+        )
+        request.responseData { result in
+            switch result {
+            case let .success(res):
+                guard let decoded = try? JSONDecoder().decode(
+                    Res.STSDailyAdjusted.self, from: res.body
+                ) else {
+                    if let errRes = try? JSONDecoder().decode(
+                        ErrRes.self, from: res.body
+                    ) {
+                        completion(nil, errRes)
+                    } else {
+                        completion(nil, ErrRes(errMsg: "Unknown Error"))
+                    }
+
+                    return
+                }
+                
+                var err: Error?
+                
+                if let export = self.export {
+                    let filename = "daily_adjusted_\(symbol)"
+                    do {
+                        try self.handleExport(data: res.body,
+                                              filename: filename,
+                                              export)
+                    } catch {
+                        err = error
+                    }
+                }
+                
+                completion(decoded, err)
+            case let .failure(err):
+                completion(nil, err)
+            } // - end switch
+        } // - end completion
+    }
+
     private func apiUrl(function: ApiConst.Stock.Function,
                         symbol: String) -> String
     {
