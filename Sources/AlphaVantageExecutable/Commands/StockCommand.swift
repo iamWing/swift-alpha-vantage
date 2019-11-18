@@ -58,7 +58,10 @@ class StockCommand: Command {
                                         completion: completion)
             }
         case .dailyAdjusted:
-            break
+            task = {
+                fetcher.fetchStockDailyAdjusted(symbol: self.symbol.value,
+                                                completion: completion)
+            }
         }
         
         DispatchQueue.global().async(execute: task)
