@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "AlphaVantageExecutable",
+    name: "Swift Alpha Vantage",
     products: [
         .executable(name: "AlphaVantageExecutable",
                     targets: ["AlphaVantageExecutable"]),
@@ -13,6 +13,10 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
+        .package(
+            url: "https://github.com/jakeheis/SwiftCLI",
+            from: "5.3.3"
+        ),
         .package(
             url: "https://github.com/IBM-Swift/Configuration.git",
             from: "3.0.4"
@@ -25,7 +29,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "AlphaVantageExecutable",
-            dependencies: ["AlphaVantage", "Configuration"]
+            dependencies: ["AlphaVantage", "Configuration", "SwiftCLI"]
         ),
         .target(
             name: "AlphaVantage",
