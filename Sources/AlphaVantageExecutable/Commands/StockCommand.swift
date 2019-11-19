@@ -51,7 +51,34 @@ class StockCommand: Command {
 
         switch function.value {
         case .intraday:
-            break
+            let intervalVal = IntradayInterval.init(
+                rawValue: intradayInterval.value ?? 5
+            )
+
+            task = {
+                var interval = ApiConst.Stock.IntradayInterval.min5
+                
+                switch intervalVal {
+                case .min1:
+                    interval = ApiConst.Stock.IntradayInterval.min1
+                case .min5:
+                    interval = ApiConst.Stock.IntradayInterval.min5
+                case .min15:
+                    interval = ApiConst.Stock.IntradayInterval.min15
+                case .min30:
+                    interval = ApiConst.Stock.IntradayInterval.min30
+                case .min60:
+                    interval = ApiConst.Stock.IntradayInterval.min60
+                default:
+                    self.stderr <<< StockCMDConst.invalidIntradayIntervalVal
+                    dispatchGroup.leave()
+                    return
+                }
+
+                fetcher.fetchStockIntraday(symbol: self.symbol.value,
+                                           interval: interval,
+                                           completion: completion)
+            }
         case .daily:
             task = {
                 fetcher.fetchStockDaily(symbol: self.symbol.value,
@@ -72,6 +99,14 @@ class StockCommand: Command {
         case intraday
         case daily
         case dailyAdjusted = "daily-adjusted"
+    }
+    
+    private enum IntradayInterval: Int {
+        case min1 = 1
+        case min5 = 5
+        case min15 = 15
+        case min30 = 30
+        case min60 = 60
     }
 }
 

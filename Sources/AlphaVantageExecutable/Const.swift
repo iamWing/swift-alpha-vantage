@@ -18,7 +18,8 @@ struct StockCMDConst {
     static let desc = "Fetch stocks market data"
     
     static let intradayIntervalDesc =
-    "Intraday interval;\nAvailable options: 1, 5, 15, 30, 60"
+    "Intraday interval;\nAvailable options: 1, 5, 15, 30, 60\n" +
+    "Value = 5 if not specified"
     
     static let outPathDesc = """
     Output path for market data downloaded;
@@ -29,4 +30,7 @@ struct StockCMDConst {
     Fetch data in CSV format;
     Data fetched will be in JSON format if not specified
     """
+    
+    static let invalidIntradayIntervalVal =
+    "Invalid intraday interval value; Available values: 1, 5, 15, 30, 60"
 }
