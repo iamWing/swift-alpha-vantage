@@ -1,5 +1,9 @@
 .DS_Store
+/.vscode
 /.build
+/.swiftpm
 /Packages
 /*.xcodeproj
 xcuserdata/
+
+/Tests/AlphaVantageTests/PrivateConst.swift

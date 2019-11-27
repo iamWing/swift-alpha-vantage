@@ -1,7 +1,8 @@
 import XCTest
 
-import MarketDataFetchersTests
+import AlphaVantageTests
 
 var tests = [XCTestCaseEntry]()
-tests += MarketDataFetchersTests.allTests()
+tests += AlphaVantageTests.__allTests()
+
 XCTMain(tests)
