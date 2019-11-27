@@ -2,12 +2,14 @@
 
 _Swift package to get market data from Alpha Vantage APIs_
 
-[Alpha Vantage] provides a set of free APIs for realtime and historical data on stocks, 
-forex (FX), and digital/crypto currencies. This package implements a command line script and 
-a Swift module to the free APIs provided by Alpha Vantage.
+[Alpha Vantage] provides a set of free APIs for realtime and historical data on 
+stocks, forex (FX), and digital/crypto currencies. This package implements a 
+command line script and a Swift module to the free APIs provided by Alpha 
+Vantage.
 
-This package requires a free API key from Alpha Vantage in order to fetch market data there. 
-The API key can be requested on http://www.alphavantage.co/support/#api-key
+This package requires a free API key from Alpha Vantage in order to fetch 
+market data there. The API key can be requested on 
+http://www.alphavantage.co/support/#api-key
 
 ## Getting Started
 
@@ -66,6 +68,7 @@ fetcher.fetchStockIntraday(symbol: "MSFT", interval: .min15) { result, err in
 #### Download Swift Alpha Vantage
 
 ```sh
+# Substitute "x.x.x" with the latest release
 curl https://github.com/iamWing/swift-alpha-vantage/releases/download/x.x.x/sav -o sav
 ```
 
@@ -104,14 +107,26 @@ sav stock intraday -i 5 -o /home/ MSFT
 
 ## Remarks
 
-The development of this package is still in early days, therefore only a few API functions 
-provided by Alpha Vantage are implemented atm. Given the limited amount of free time I have 
-recently, the progress on the remaining functions is likely to be slow in the foreseeable 
-future. You're more than welcome to participate the development if you've got the time. 
+The development of this package is still in early days, therefore only a few 
+API functions provided by Alpha Vantage are implemented atm. Given the limited 
+amount of free time I have recently, the progress on the remaining functions is 
+likely to be slow in the foreseeable future. You're more than welcome to 
+participate the development if you've got the time.
 
 ## Contributions
 
 Contributions via pull requests are welcome and encouraged :)
+
+In order to run the unit tests, you'll need to create a file 
+`PrivateConst.swift` under the folder `Tests/AlphaVantageTests/` for storing 
+the API key for unit tests, otherwise the test module won't be able to compile. 
+
+```Swift
+// PrivateConst.swift
+enum PrivateConst {
+    static var apiKey: String { return "your-api-key" }
+}
+```
 
 ## Author
 

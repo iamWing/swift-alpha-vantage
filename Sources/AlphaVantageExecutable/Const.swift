@@ -3,7 +3,7 @@ struct Const {
     private init() {}
     
     static let appName = "Swift Alpha Vantage"
-    static let version = "1.0.0"
+    static let version = "0.1.0"
     static let description =
     "Swift Alpha Vantage - Unofficial Swift wrapper of Alpha Vantage APIs"
     static let cmd = "sav"
